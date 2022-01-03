@@ -1,4 +1,4 @@
-provider "aws" {
+/*provider "aws" {
   access_key = "AKIA27BRXH7YDJNQO3U5"
   secret_key = "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"
   region     = "us-east-1"
@@ -46,3 +46,4 @@ resource "aws_instance" "hello-terra" {
     name = "Raghu_terra_ec2_Webserver"
   }
 }
+*/
