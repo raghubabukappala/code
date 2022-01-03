@@ -1,7 +1,7 @@
 provider "aws" {
-access_key = "AKIA27BRXH7YFX6F5ZDS"
-secret_key = "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"
-  region     = "ca-central-1"
+  access_key = "AKIA27BRXH7YEVSIJBTG"
+  secret_key = "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"
+  region     = "us-east-1"
 }
 #Creating security group,allow ssh and http
 resource "aws_security_group" "test-terra-ssh-http" {
