@@ -1,28 +1,48 @@
 provider "aws" {
-  region     = "us-east-2"
-  access_key = "AKIAVFJ7VPG7NN3UGFJ2"
-  secret_key = "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"
+access_key = "AKIA27BRXH7YFX6F5ZDS"
+secret_key = "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"
+  region     = "ca-central-1"
 }
+#Creating security group,allow ssh and http
+resource "aws_security_group" "test-terra-ssh-http" {
+  name        = "test-terra-ssh-http"
+  description = "allowing ssh and http traffic"
 
-
-resource "aws_instance" "myec2" {
-     ami= "ami-074cce78125f09d61"
-     instance_type = "t2.micro"
-     key_name = "raghu-terraform"
-provisioner "remote-exec"{
-  inline = [
-    "sudo amazon-linux-extras install -y nginx1.12"
-    #yum -y install nginx1.12 (if centos linux)
-    "sudo systemctl start nginx
-  ]
-  #for giving user name and pem access_key
-  connection {
-    type = "ssh"
-    user = "ec2-user"
-    private_key = file("./raghu-terraform.pem")
-    host = self.public_ip
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-  
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+#security group ends here.
+#Cfreating instance
+resource "aws_instance" "hello-terra" {
+  ami             = "ami-09321d7714bae0aab"
+  instance_type   = "t2.micro"
+  security_groups = ["${aws_security_group.test-terra-ssh-http.name}"]
+  key_name        = "forboth"
+  user_data       = <<-EOF
+           #! /bin/bash
+           sudo yum install httpd -y
+           sudo systemctl start httpd
+          sudo systemctl enable httpd
+          echo "<h1> Sape test webserver by RAghu using terraform</h1>" >> /var/www/html/index.html
+          EOF
 
+  tags = {
+    name = "Raghu_terra_ec2_Webserver"
   }
 }
