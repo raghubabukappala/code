@@ -4,8 +4,8 @@ provider "aws" {
   region     = "us-east-1"
 }
 #Creating security group,allow ssh and http
-resource "aws_security_group" "test-terra-ssh-http" {
-  name        = "test-terra-ssh-http"
+resource "aws_security_group" "test1-terra-ssh-http" {
+  name        = "test1-terra-ssh-http"
   description = "allowing ssh and http traffic"
 
   ingress {
@@ -32,7 +32,7 @@ resource "aws_security_group" "test-terra-ssh-http" {
 resource "aws_instance" "hello-terra" {
   ami             = "ami-0ed9277fb7eb570c9"
   instance_type   = "t2.micro"
-  security_groups = ["${aws_security_group.test-terra-ssh-http.name}"]
+  security_groups = ["${aws_security_group.test1-terra-ssh-http.name}"]
   key_name        = "Navya"
   user_data       = <<-EOF
            #! /bin/bash
